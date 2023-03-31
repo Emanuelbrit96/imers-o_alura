@@ -8,7 +8,6 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 
 public class ClientHttp {
-	String url;
 
 	public String buscaDados(String url) {
 
@@ -21,7 +20,8 @@ public class ClientHttp {
 			// Cliente envie o requerimento que foi criado e o conteúdo dele deve vir como
 			// string
 			HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-			String body = response.body();// Pegando o conteúdo do corpo da requisição
+			return response.body();// Pegando o conteúdo do corpo da requisição
+
 		} catch (IOException | InterruptedException ex) {
 			throw new RuntimeException(ex);
 		}

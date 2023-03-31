@@ -3,37 +3,35 @@ package imersao_alura_java;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
 import java.util.Map;
 
 public class App {
 	public static void main(String[] args) throws IOException, InterruptedException {
-//		String url = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/TopMovies.json";
-		String url = "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&start_date=2022-06-12&end_date=2022-06-14";
+		String url = "https://raw.githubusercontent.com/alura-cursos/imersao-java-2-api/main/TopMovies.json";
+		ExtratorDeConteudo extrator = new ExtratorDeConteudoImdb();
 
-		
-		// System.out.println(body);
+		// String url =
+		// "https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY&start_date=2022-06-12&end_date=2022-06-14";
+		// ExtratorDeConteudo extrator = new ExtratorDeConteudosDaNasa();
 
-		JsonParser parser = new JsonParser();
+		ClientHttp http = new ClientHttp();
+		String json = http.buscaDados(url);
 
-		List<Map<String, String>> listaDeConteudos = parser.parse(body);
+		List<Conteudo> listaDeConteudos = extrator.extrairConteudo(json);
+
 		// System.out.println(listaDeFilmes.size());
 		// System.out.println(listaDeFilmes.get(0));
 
 		File diretorio = new File("figurinhas/");
 		diretorio.mkdir();// Criando a pasta(Diretorio) caso não exista
 
-		for (Map<String, String> conteudo : listaDeConteudos) {
+		for (Conteudo conteudo : listaDeConteudos) {
 
 //			InputStream inputStream = new URL(map.get("image")).openStream();
-			InputStream inputStream = new URL(conteudo.get("url")).openStream();
-			String titleImage = conteudo.get("title");
+			InputStream inputStream = new URL(conteudo.getUrlImage()).openStream();
+			String titleImage = conteudo.getTitle();
 			String txtImage = titleImage.replaceAll("[-+^_:']", "");
 			String txtConcatImage = "figurinhas/" + txtImage + ".png";
 //			double rating = Double.parseDouble(map.get("imDbRating"));
